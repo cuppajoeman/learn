@@ -48,11 +48,19 @@ type RatingCount {
   count: Int!
 }
 
+type AreaOfStudy {
+  title: String
+}
+
 type Mutation {
   mergeBusinessCategory(categories: [String!]!, businessId: ID!): Business
     @cypher(
       statement: "MATCH (b:Business {businessId: $businessId}) UNWIND $categories AS cat MERGE (c:Category {name: cat}) MERGE (b)-[:IN_CATEGORY]->(c) RETURN b"
     )
+  createAreaOfStudy(title: String): AreaOfStudy
+  @cypher(
+    statement: "CREATE (x:AOS { title: $title}) RETURN x"
+  )
 }
 
 type Query {
